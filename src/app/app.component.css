@@ -1,0 +1,13 @@
+.main-container {
+    margin-top: 2em;
+}
+
+/* make the div for adding new items stay on the page even after scroll */
+.create-item {
+    position: sticky;
+    top: 2em;
+}
+
+.create-item-container {
+    position: relative;
+}
