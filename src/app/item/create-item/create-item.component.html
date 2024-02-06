@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">Add an item</div>
+  <div class="card-body">
+    <div class="card-text">
+      <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="nameId" class="form-label">Item name*</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            id="nameId"
+            placeholder="Item name"
+            formControlName="name"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="descriptionId" class="form-label">Description</label>
+          <textarea
+            class="form-control form-control-sm"
+            id="descriptionId"
+            rows="3"
+            placeholder="Item description"
+            formControlName="description"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm form-control mt-3">
+          Save
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

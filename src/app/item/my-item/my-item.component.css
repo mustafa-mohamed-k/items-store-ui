@@ -1,0 +1,8 @@
+.item{
+    margin-bottom: 1em;
+}
+
+.buttons-footer {
+    display: flex;
+    gap: 1em;
+}

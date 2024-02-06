@@ -1,0 +1,9 @@
+
+:root {
+    --custom-focus-ring-color: rgba(255, 0, 0, 0.5);
+  }
+  
+* :focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem var(--custom-focus-ring-color); /* Use the custom focus ring color */
+  }
