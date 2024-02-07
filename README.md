@@ -2,6 +2,24 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.2.
 
+## Local development setup
+
+1. Run `npm ci` to install the node modules without altering `package-lock.json`.
+This is the recommended approach.<br/>
+If the above does not work, run `npm i` to install all packages. Note that 
+this may modify `package-lock.json`<br/><br/>
+
+2. Run the API as documented [here](https://github.com/mustafa-mohamed-k/items-store-api#local-development).<br/>
+Note down the port that used as we will be using it elsewhere in a moment.<br/><br/>
+
+3. Open [proxy.conf.js](proxy.conf.js) and edit the port number on line 5 to 
+match the port number you used in step 2 above. (If you ran the API from Visual Studio, 
+you will probably not have to change the port number.)<br/><br/>
+
+4. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/` to see
+the application in action.😎
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
