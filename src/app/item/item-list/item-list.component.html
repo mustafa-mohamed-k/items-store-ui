@@ -20,6 +20,6 @@
   </div>
   } 
   @for(item of items; track item.id){
-  <app-my-item [item]="item"></app-my-item>
+  <app-my-item [item]="item" [refreshItems]="getItems" ></app-my-item>
   }
 </div>

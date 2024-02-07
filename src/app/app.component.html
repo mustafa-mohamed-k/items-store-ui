@@ -2,10 +2,10 @@
 <div class="container main-container">
     <div class="row">
         <div class="col col-md-4 create-item-container">
-            <app-create-item class="create-item"/>
+            <app-create-item class="create-item" (itemAdded)="onItemAdded($event)"/>
         </div>
         <div class="col col-md-8 items">
-            <app-item-list></app-item-list>
+            <app-item-list [refreshList]="refreshList"  ></app-item-list>
         </div>
     </div>
   

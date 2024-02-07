@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -7,11 +7,12 @@ import {
 } from '@angular/forms';
 import { MyItem } from '../../model/MyItem';
 import { ItemService } from '../../services/item.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-create-item',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgIf],
   templateUrl: './create-item.component.html',
   styleUrl: './create-item.component.css',
 })
@@ -20,25 +21,49 @@ export class CreateItemComponent {
     name: FormControl<string | null>;
     description: FormControl<string | null>;
   }> = new FormGroup({
-    name: new FormControl<string>('', Validators.required),
+    name: new FormControl<string>('', [Validators.required, Validators.minLength(3)]),
     description: new FormControl<string>(''),
   });
 
-  private item?: MyItem;
+  public errorMessage: string = '';
+  public successMessage: string = '';
+  public saving: boolean = false;
 
-  constructor(private itemService: ItemService) {}
+  @Output() private itemAdded: EventEmitter<MyItem>;
+
+  constructor(private itemService: ItemService) {
+    this.itemAdded = new EventEmitter<MyItem>();
+  }
 
   onSubmit() {
-    console.log(this.itemForm.get('name')?.value);
+    this.errorMessage = '';
+    this.successMessage = '';
+
     if (this.itemForm.valid) {
-      this.item = {
-        name: this.itemForm.get('name')?.value ?? '',
-        description: this.itemForm.get('description')?.value ?? '',
-      };
-      const created = this.itemService.createItem(this.item);
-      console.log({ created });
-      if (created) {
-        this.itemService.getItems();
+      try {
+        this.saving = true;
+        const item: MyItem = {
+          name: this.itemForm.get('name')?.value ?? '',
+          description: this.itemForm.get('description')?.value ?? '',
+        };
+        this.itemService.createItem(item).subscribe({
+          next: (value) => {
+            this.successMessage = 'Item saved successfully.';
+            this.errorMessage = '';
+            this.itemForm.reset();
+            this.itemAdded.emit(value);
+            this.saving = false;
+          },
+          error: () => {
+            this.errorMessage = 'An error occurred. Try again later.';
+            this.successMessage = '';
+            this.saving = false;
+          },
+        });
+      } catch (error) {
+        this.errorMessage = 'An error occurred.';
+        this.successMessage = '';
+        this.saving = false;
       }
     }
   }
