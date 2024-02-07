@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
 import { MyItem } from '../model/MyItem';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ItemService {
-  private items: MyItem[];
+  constructor(private http: HttpClient) {}
 
-  constructor() {
-    this.items = [];
-  }
-
-  getItems(): MyItem[] {
-    return this.items;
+  getItems(): Observable<MyItem[]> {
+    return this.http.get<MyItem[]>('/api/Items');
   }
 
   /**
@@ -20,15 +18,19 @@ export class ItemService {
    * @param item the item to add
    * @returns true if the item was added, false otherwise
    */
-  createItem(item: MyItem): boolean {
-    const foundItem = this.items.find((current) => current.id === item.id);
-    if (foundItem) return false;
-    item.id = this.items.length;
-    this.items.push(item);
-    return true;
+  createItem(item: MyItem): Observable<MyItem> {
+    const body = {
+      name: item.name,
+      description: item.description,
+    };
+    return this.http.post<MyItem>('/api/Items', body);
   }
 
-  deleteItem(id: number): boolean {
-    return false;
+  deleteItem(id: number): Observable<any> {
+    return this.http.delete<any>(`/api/Items/${id}`);
+  }
+
+  updateItem(item: MyItem): Observable<MyItem> {
+    return this.http.patch<MyItem>(`/api/Items`, item);
   }
 }

@@ -4,88 +4,76 @@
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      stroke-width="1.5"
+      stroke-width="2.5"
       stroke="currentColor"
-      width="24"
-      height="24"
+      width="20"
+      height="20"
     >
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
-        d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
+        d="m4.5 12.75 6 6 9-13.5"
       />
     </svg>
-    @if(editing){
-    <input type="text" class="form-control form-control-sm" />
-    } @else {
+
     {{ item.name }}
-    }
   </h5>
   <div class="card-body">
-    <p class="card-text">
+    <div class="card-text">
       @if(editing){
-      <textarea
-        class="form-control form-control-sm"
-        rows="2"
-        placeholder="Item description"
-      ></textarea>
+      <form [formGroup]="itemForm" (ngSubmit)="onEdit()">
+        <input
+          class="form-control form-control-sm mb-2"
+          formControlName="name"
+        />
+        <small class="text-danger text-sm small"
+        *ngIf="itemForm.get('name')?.invalid && ( itemForm.get('name')?.dirty ||itemForm.get('name')?.touched )"
+        >Name must be at least three characters</small>
+        <textarea
+          class="form-control form-control-sm mb-2"
+          formControlName="description"
+        ></textarea>
+        <div class="save-cancel-div">
+          <button class="btn btn-sm btn-success" [disabled]="saving">
+            <div
+              class="spinner-border spinner-border-sm mr-2"
+              role="status"
+              *ngIf="saving"
+            >
+              <span class="visually-hidden">Saving</span>
+            </div>
+            <span>Save</span>
+          </button>
+          <button
+            class="btn btn-sm btn-primary btn-outline"
+            [disabled]="saving"
+            (click)="editing = false"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
       } @else{ @if(!item.description){
       <span class="text-muted text-xs small">Description not provided</span>
       } @else {
       {{ item.description }}
       }}
-    </p>
+    </div>
   </div>
   <div class="card-footer buttons-footer">
-    @if(editing){
-    <button class="btn btn-sm btn-success">
+    <button
+      class="btn btn-sm btn-secondary mr-2"
+      (click)="editing = true"
+      [disabled]="editing"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        width="24"
-        height="24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m4.5 12.75 6 6 9-13.5"
-        />
-      </svg>
-
-      Save
-    </button>
-    <button class="btn btn-sm btn-secondary" (click)="editing = false">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        width="24"
-        height="24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M6 18 18 6M6 6l12 12"
-        />
-      </svg>
-
-      Cancel
-    </button>
-    } @else {
-    <button class="btn btn-sm btn-secondary mr-2" (click)="editing = true">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        width="24"
-        height="24"
+        width="16"
+        height="16"
       >
         <path
           stroke-linecap="round"
@@ -95,15 +83,19 @@
       </svg>
       Edit
     </button>
-    <button class="btn btn-sm btn-warning ml-2">
+    <button
+      class="btn btn-sm btn-warning ml-2"
+      (click)="deleteItem($any(item.id))"
+      [disabled]="deleting"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="red"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
       >
         <path
           stroke-linecap="round"
@@ -111,10 +103,14 @@
           d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
         />
       </svg>
-
-      Delete
+      <div
+        class="spinner-border spinner-border-sm"
+        *ngIf="deleting"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <span>Delete</span>
     </button>
-
-    }
   </div>
 </div>

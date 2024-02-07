@@ -12,6 +12,10 @@
             placeholder="Item name"
             formControlName="name"
           />
+          <small class="text-danger small" 
+          *ngIf="itemForm.get('name')?.invalid && ( itemForm.get('name')?.dirty ||itemForm.get('name')?.touched )">
+            Name must be at least three characters.
+          </small>
         </div>
         <div class="mb-3">
           <label for="descriptionId" class="form-label">Description</label>
@@ -23,8 +27,20 @@
             formControlName="description"
           ></textarea>
         </div>
-        <button type="submit" class="btn btn-primary btn-sm form-control mt-3">
-          Save
+        @if(errorMessage){
+        <small class="text-error text-xs">{{ errorMessage }}</small>
+        } @else if(successMessage){
+        <span class="text-xs small text-success">{{ successMessage }}</span>
+        }
+        <button
+          [disabled]="saving"
+          type="submit"
+          class="btn btn-primary btn-sm form-control mt-3"
+        >
+          <div class="spinner-border spinner-border-sm mr-2" role="status" *ngIf="saving">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <span class="ml-2">Save</span>
         </button>
       </form>
     </div>
