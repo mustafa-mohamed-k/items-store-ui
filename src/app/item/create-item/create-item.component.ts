@@ -29,10 +29,31 @@ export class CreateItemComponent {
   public successMessage: string = '';
   public saving: boolean = false;
 
+  public factorialMessage: string = '';
+  public gettingFactorials:boolean = false;
+  public factorials: number[] = [];
+
   @Output() private itemAdded: EventEmitter<MyItem>;
 
   constructor(private itemService: ItemService) {
     this.itemAdded = new EventEmitter<MyItem>();
+  }
+
+  onFactorial() {
+    this.factorialMessage = "Generating factorials...";
+    this.gettingFactorials = true;
+    this.itemService.getFactorials().subscribe({
+      next: (value) => {
+        this.gettingFactorials = false;
+        this.factorialMessage = "";
+        this.factorials = value;
+      },
+      error: () => {
+        this.factorialMessage = "An error occurred while generating factorials.";
+        this.gettingFactorials = false;
+        this.factorials = [];
+      },
+    });
   }
 
   onSubmit() {
@@ -51,7 +72,7 @@ export class CreateItemComponent {
             this.successMessage = 'Item saved successfully.';
             this.errorMessage = '';
             this.itemForm.reset();
-            this.itemAdded.emit(value);
+            this.itemAdded.emit(value); // notify the items-list component that an item has been added.
             this.saving = false;
           },
           error: () => {

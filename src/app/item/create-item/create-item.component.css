@@ -7,3 +7,9 @@
     outline: none;
     box-shadow: 0 0 0 0.2rem var(--custom-focus-ring-color); /* Use the custom focus ring color */
   }
+
+  .factorial-div{
+    display: flex;
+    flex-direction: column;
+    gap: 2 2;
+  }
