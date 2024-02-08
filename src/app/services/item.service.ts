@@ -26,11 +26,29 @@ export class ItemService {
     return this.http.post<MyItem>('/api/Items', body);
   }
 
+  /**
+   * Delete an item.
+   * @param id the id of the item to delete
+   * @returns the API response
+   */
   deleteItem(id: number): Observable<any> {
     return this.http.delete<any>(`/api/Items/${id}`);
   }
 
+  /**
+   * Update an item's field.
+   * @param item the new item. The id of the item should be the ID of the item we want to upate.
+   * @returns the updated item
+   */
   updateItem(item: MyItem): Observable<MyItem> {
     return this.http.patch<MyItem>(`/api/Items`, item);
+  }
+
+  /**
+   * Get the factorials of the number of items added. 
+   * @returns the factorials. The element at each index is the factorial of that index.
+   */
+  getFactorials(): Observable<number[]>{
+    return this.http.get<number[]>('api/Items/factorial');
   }
 }

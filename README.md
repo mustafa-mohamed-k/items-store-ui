@@ -19,6 +19,11 @@ you will probably not have to change the port number.)<br/><br/>
 4. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/` to see
 the application in action.😎
 
+## Screenshots
+![Screenshot](image.png)
+![Screenshot 2](image-1.png)
+![Factorials screenshot](image-2.png)
+
 
 ## Development server
 
